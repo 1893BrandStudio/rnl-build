@@ -1,0 +1,11 @@
+/*
+Theme Name: WP Starter
+Theme URI: http://github.com/ethanbutler/wp-starter
+Author: Ethan Butler
+Author URI: http://sqnts.xyz
+Description: A WordPress boilerplate with Gulp and Bootstrap 3.
+Version: 1.0
+License: MIT, GPL
+*/
+
+/* Do not add styles to this file, as it is not included on the front end. Add them to /assets/scss where they will be compiled. */

@@ -1,0 +1,31 @@
+// Use this file for general typographic styles.
+// Keep this general – specific text styles should be saved
+// for components, where they're less likely to have side effects.
+// This is the only file where you should use tags as selectors.
+
+html {
+  font-size: 18px;
+}
+
+body {
+  color: $body;
+  font-family: $sans;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @include antialiased;
+  font-family: $condensed;
+}
+
+p {
+  font-weight: 300;
+}
+
+a {
+  text-decoration: none;
+}

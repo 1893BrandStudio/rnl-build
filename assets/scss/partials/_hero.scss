@@ -1,0 +1,16 @@
+.hero {
+  margin: 0 0 $grid-gutter-width/4;
+  padding: $grid-gutter-width*6 0 $grid-gutter-width;
+  background: $brand-quarternary;
+  position: relative; // for absolute positioning children elements
+  &--home {
+    background: $body;
+    color: $brand-quarternary;
+  }
+  &-img {
+    @include all-over-image;
+    + h2 {
+      position: relative;
+    }
+  }
+}

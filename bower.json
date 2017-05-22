@@ -1,0 +1,17 @@
+{
+  "name": "wp-bs3-boiler",
+  "description": "Gulp tasks for boilerplate Bootstrap 3 WordPress theme.",
+  "main": "gulpfile.js",
+  "authors": [
+    "Ethan Butler"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

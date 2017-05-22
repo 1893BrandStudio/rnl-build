@@ -1,0 +1,10 @@
+.banner {
+  background: $brand-primary;
+  padding: $grid-gutter-width/2 0;
+  &-siteTitle {
+    font-size: $size-lg;
+  }
+  &-siteLink {
+    color: $white;
+  }
+}

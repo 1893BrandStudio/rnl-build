@@ -6,7 +6,7 @@
     <?php $i = 0; ?>
     <?php while(have_posts()): the_post(); ?>
       <?php if($i > 0 && $i % 3 == 0){ ?>
-        </div><!-- /.row -->
+        </div>
         <div class="row">
       <?php } ?>
       <div class="col-xs-12 col-md-4">

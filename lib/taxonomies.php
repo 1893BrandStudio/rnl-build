@@ -48,6 +48,6 @@ class Taxonomy {
   }
 }
 
-// $sample = new Taxonomy('Region', false, ['person'], [
-//   'hierarchical' => false
-// ]);
+$sample = new Taxonomy('Region', false, ['person'], [
+  'hierarchical' => false
+]);

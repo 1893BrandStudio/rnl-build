@@ -1,4 +1,3 @@
-const _              = require('lodash')
 const autoprefixer   = require('gulp-autoprefixer')
 const argv           = require('yargs').argv
 const babel          = require('gulp-babel')
@@ -12,6 +11,7 @@ const jshint         = require('gulp-jshint')
 const nano           = require('gulp-cssnano')
 const notify         = require('gulp-notify')
 const plumber        = require('gulp-plumber')
+const rename         = require('gulp-rename')
 const sass           = require('gulp-sass')
 const sourcemaps     = require('gulp-sourcemaps')
 const stylish        = require('jshint-stylish')
@@ -32,6 +32,7 @@ const handler = (color, msg, skip) => {
 
 const isProd = a => !!a.prod
 
+// Dumps ACF fields into /lib/dev/acf.xml so that they can be version controlled
 gulp.task('acf', () => {
   const axios = require('axios')
   const fs    = require('fs')
@@ -51,26 +52,29 @@ gulp.task('acf', () => {
     })
 })
 
+// Removes existing fonts from /dist
 gulp.task('clean-fonts', () => {
   return gulp.src('./dist/fonts', {read: false})
     .pipe(clean())
-    .on('end', () => { handler('white', 'Fonts cleaned!') })
+    .on('end', () => handler('white', 'Fonts cleaned!'))
 })
 
+// Adds fonts from /assets to /dist
 gulp.task('fonts', ['clean-fonts'], () => {
   return gulp.src('./assets/fonts/**/*.*')
     .pipe(gulp.dest('./dist/fonts'))
     .pipe(browsersync.stream())
 })
 
+// Remove existing javascript from /dist
 gulp.task('clean-js', () => {
   return gulp.src('./dist/js', {read: false})
     .pipe(clean())
-    .on('end', () => { handler('white', 'JS cleaned!') })
+    .on('end', () => handler('white', 'JS cleaned!'))
 })
 
+// Run JS through JSHint, Babel, and Uglify. Produces source maps.
 gulp.task('js', ['clean-js'], () => {
-  let prod = isProd(argv)
   return gulp.src('./assets/js/**/*.js')
     .pipe(jshint({
       esversion: 6,
@@ -80,50 +84,54 @@ gulp.task('js', ['clean-js'], () => {
       jquery: true
     }))
     .pipe(jshint.reporter(stylish))
-    .on('end', () => { handler('green', 'JS passed linter!') })
-    .pipe(babel({
-      presets: ['es2015']
-    }))
-    .on('end', () => { handler('yellow', 'Babelification complete!') })
-    .on('error', errHandler)
-    .pipe(gulpif(prod, uglify()))
-    .on('end', () => { handler('blue', 'Uglification complete!') })
-    .on('error', errHandler)
+      .on('end', () => handler('green', 'JS passed linter!'))
+    .pipe(sourcemaps.init())
+      .pipe(plumber())
+      .pipe(babel({
+        presets: ['es2015']
+      }))
+        .on('end', () => handler('yellow', 'Babelification complete!'))
+        .on('error', errHandler)
+      .pipe(uglify())
+        .on('end', () => handler('blue', 'Uglification complete!'))
+        .on('error', errHandler)
+      .pipe(rename({extname: '.min.js'}))
+    .pipe(sourcemaps.write('../maps'))
     .pipe(gulp.dest('./dist/js/'))
-    .on('end', () => { handler('green', 'JS task complete!') })
+      .on('end', () => handler('green', 'JS task complete!'))
     .pipe(browsersync.stream())
 })
 
 gulp.task('clean-css', () => {
   return gulp.src('dist/css', {read: false})
     .pipe(clean())
-    .on('end', () => { handler('white', 'CSS cleaned!') })
+    .on('end', () => handler('white', 'CSS cleaned!'))
 })
 
 gulp.task('css', ['clean-css'], () => {
-  let prod = isProd(argv)
   return gulp.src('./assets/scss/main.scss')
     .pipe(plumber())
-    .pipe(gulpif(prod, sourcemaps.init()))
-    .on('end', () => { handler('yellow', 'SCSS Source map started!', !prod) })
-    .pipe(sass())
-    .on('end', () => { handler('blue', 'SCSS compilation complete!') })
-    .on('error', errHandler)
-    .pipe(autoprefixer({ browsers: 'last 2 versions' }))
-    .on('end', () => { handler('cyan', 'Autoprefixer complete!') })
-    .pipe(gulpif(prod, nano()))
-    .on('end', () => { handler('magenta', 'Nano complete!', !prod) })
-    .pipe(gulpif(prod, sourcemaps.write('.')))
-    .on('end', () => { handler('yellow', 'SCSS Source map complete!', !prod)})
+    .pipe(sourcemaps.init())
+      .on('end', () => handler('yellow', 'SCSS Source map started!'))
+      .pipe(sass())
+        .on('end', () => handler('blue', 'SCSS compilation complete!'))
+        .on('error', errHandler)
+      .pipe(autoprefixer({ browsers: 'last 2 versions' }))
+        .on('end', () => handler('cyan', 'Autoprefixer complete!'))
+      .pipe(nano())
+        .on('end', () => handler('magenta', 'Nano complete!'))
+      .pipe(rename({extname: '.min.css'}))
+    .pipe(sourcemaps.write('../maps'))
+      .on('end', () => handler('yellow', 'SCSS Source map complete!'))
     .pipe(gulp.dest('./dist/css/'))
-    .on('end', () => { handler('green', 'CSS task complete!') })
+      .on('end', () => handler('green', 'CSS task complete!'))
     .pipe(browsersync.stream())
 })
 
 gulp.task('clean-images', () => {
   return gulp.src('./dist/img', {read: false})
     .pipe(clean())
-    .on('end', () => { handler('white', 'Images cleaned!') })
+    .on('end', () => handler('white', 'Images cleaned!'))
 })
 
 gulp.task('images', ['clean-images'], () => {

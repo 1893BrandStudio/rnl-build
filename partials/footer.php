@@ -6,8 +6,8 @@
           'depth'          => 0
         ] ); ?>
         <div class="footer-bottom">
-          <small class="footer-copyright">&copy; <?= date('Y'); ?>
-        <div>
+          <small class="footer-copyright">&copy; <?= date('Y'); ?></small>
+        </div>
       </div>
     </footer>
     <?php wp_footer(); ?>

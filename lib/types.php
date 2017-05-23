@@ -49,8 +49,8 @@ class Type {
   }
 }
 
-// $simple_cpt = new Type('Thing');
-// $advanced_cpt = new Type('Person', 'People', [
-//    'supports' => 'title',
-//    'public'   => 'false'
-// ]);
+$simple_cpt = new Type('Thing');
+$advanced_cpt = new Type('Person', 'People', [
+   'supports' => 'title',
+   'public'   => 'false'
+]);
